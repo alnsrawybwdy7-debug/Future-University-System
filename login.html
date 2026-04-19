@@ -12,7 +12,7 @@
 
     <style>
         body {
-            background: #0f172a; /* لون داكن احترافي */
+            background: #0f172a;
             background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.2) 0%, transparent 40%),
                               radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.15) 0%, transparent 40%);
             height: 100vh;
@@ -21,9 +21,9 @@
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
+            margin: 0;
         }
 
-        /* تصميم الكارت مشابه للصورة التي أرفقتها */
         .login-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
@@ -59,22 +59,17 @@
 
         .university-logo img { width: 100%; height: auto; }
 
-        h3 { font-weight: 700; letter-spacing: -0.5px; margin-bottom: 30px; }
+        h3 { font-weight: 700; margin-bottom: 30px; color: #fff; }
 
         .form-control {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.9) !important;
             border: none;
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 15px;
             text-align: center;
             font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
-            background: #ffffff;
+            color: #000;
         }
 
         .btn-login {
@@ -87,13 +82,12 @@
             font-weight: 600;
             font-size: 1.1rem;
             margin-top: 10px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 10px 15px rgba(37, 99, 235, 0.4);
             color: white;
         }
 
@@ -103,7 +97,6 @@
             font-size: 0.9rem;
             display: inline-block;
             margin-top: 20px;
-            transition: color 0.2s;
         }
 
         .forgot-link:hover { color: #60a5fa; }
@@ -131,41 +124,48 @@
 </div>
 
 <script>
-    // --- ربط Firebase (ضع بياناتك هنا) ---
+    // --- 1. إعدادات Firebase الحقيقية ---
+    // الصق بياناتك هنا ليعمل الربط
     const firebaseConfig = {
         apiKey: "AIzaSy...",
-        authDomain: "your-app.firebaseapp.com",
-        databaseURL: "https://your-app-default-rtdb.firebaseio.com",
-        projectId: "your-app",
-        storageBucket: "your-app.appspot.com",
+        authDomain: "your-project.firebaseapp.com",
+        databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+        projectId: "your-project",
+        storageBucket: "your-project.appspot.com",
         messagingSenderId: "...",
         appId: "..."
     };
     
-    firebase.initializeApp(firebaseConfig);
+    // تهيئة الفايربيس
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.database();
 
-    // دالة تسجيل الدخول
+    // --- 2. دالة تسجيل الدخول ---
     function login() {
-        const phone = document.getElementById('adminPhone').value.trim();
-        const pass = document.getElementById('adminPassword').value.trim();
+        const phoneInput = document.getElementById('adminPhone').value.trim();
+        const passInput = document.getElementById('adminPassword').value.trim();
 
-        if(!phone || !pass) {
-            alert("⚠️ يرجى إدخال رقم الهاتف وكلمة المرور");
+        if(!phoneInput || !passInput) {
+            alert("⚠️ يرجى ملء رقم الهاتف وكلمة المرور");
             return;
         }
 
-        // التحقق من قاعدة البيانات
-        db.ref('adminSetting').once('value', (snap) => {
+        // جلب البيانات من Firebase فرع adminSetting
+        db.ref('adminSetting').once('value').then((snap) => {
             const data = snap.val();
             
-            if (data && phone === data.phone && pass === data.password) {
-                alert("✅ أهلاً بك! تم تسجيل الدخول بنجاح.");
-                // هنا تضع رابط صفحة لوحة التحكم الخاصة بك
-                window.location.href = "dashboard.html"; 
+            if (data && phoneInput === data.phone && passInput === data.password) {
+                alert("✅ تم تسجيل الدخول بنجاح!");
+                // الانتقال لصفحتك المسماة admin.html
+                window.location.href = "admin.html"; 
             } else {
-                alert("❌ عذراً، رقم الهاتف أو كلمة المرور غير صحيحة!");
+                alert("❌ فشل الدخول: الرقم أو الباسورد غير صحيح");
             }
+        }).catch((error) => {
+            console.error(error);
+            alert("حدث خطأ في الاتصال بقاعدة البيانات: " + error.message);
         });
     }
 </script>
