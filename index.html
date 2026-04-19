@@ -1,335 +1,379 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>بوابة الطالب | جامعة المستقبل</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <style>
-            :root {
-                --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-                --card-bg: rgba(255, 255, 255, 0.95);
-                --text-color: #2b2d42;
-                --input-bg: #ffffff;
-                --primary: #4361ee;
-                --accent: #4cc9f0;
-                --success: #06d6a0;
-                --danger: #ef233c;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطالب | جامعة المستقبل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2b2d42;
+            --input-bg: #ffffff;
+            --primary: #4361ee;
+            --accent: #4cc9f0;
+            --success: #06d6a0;
+            --danger: #ef233c;
+        }
 
-            .dark-mode {
-                --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-                --card-bg: rgba(25, 25, 35, 0.95);
-                --text-color: #e0e0e0;
-                --input-bg: #2d3436;
-                --primary: #4cc9f0;
-            }
+        .dark-mode {
+            --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --card-bg: rgba(25, 25, 35, 0.95);
+            --text-color: #e0e0e0;
+            --input-bg: #2d3436;
+            --primary: #4cc9f0;
+        }
 
-            body {
-                background: var(--bg-gradient);
-                color: var(--text-color);
-                font-family: 'Segoe UI', sans-serif;
-                margin: 0;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: 0.5s;
-            }
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.5s;
+        }
 
-            .theme-toggle {
-                position: absolute;
-                top: 20px;
-                left: 20px;
-                background: var(--card-bg);
-                border: none;
-                padding: 12px;
-                border-radius: 50%;
-                cursor: pointer;
-                color: var(--primary);
-                font-size: 20px;
-                z-index: 10001;
-            }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--card-bg);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 20px;
+            z-index: 10001;
+        }
 
-            #welcomeOverlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(45deg, #4361ee, #4cc9f0);
-                z-index: 9999;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                color: white;
-            }
+        #welcomeOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #4361ee, #4cc9f0);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
 
-            .start-btn {
-                padding: 18px 50px;
-                background: white;
-                color: #4361ee;
-                border: none;
-                border-radius: 50px;
-                font-size: 22px;
-                font-weight: bold;
-                cursor: pointer;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            }
+        .start-btn {
+            padding: 18px 50px;
+            background: white;
+            color: #4361ee;
+            border: none;
+            border-radius: 50px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
 
-            .container {
-                width: 100%;
-                max-width: 450px;
-                padding: 20px;
-                box-sizing: border-box;
-            }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-            .main-card {
-                background: var(--card-bg);
-                border-radius: 30px;
-                padding: 35px 25px;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-                text-align: center;
-            }
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-            .input-group {
-                position: relative;
-                margin-bottom: 15px;
-                text-align: right;
-            }
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+            text-align: right;
+        }
 
-            .input-group i {
-                position: absolute;
-                right: 15px;
-                top: 40px;
-                color: var(--primary);
-                z-index: 5;
-            }
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--primary);
+            z-index: 5;
+        }
 
-            label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: 600;
-                font-size: 13px;
-            }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 13px;
+        }
 
-            input,
-            select {
-                width: 100%;
-                padding: 12px 40px 12px 12px;
-                border-radius: 12px;
-                border: 1px solid #ddd;
-                background-color: var(--input-bg);
-                color: var(--text-color);
-                font-size: 15px;
-                box-sizing: border-box;
-            }
+        input, select {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 15px;
+            box-sizing: border-box;
+        }
 
-            .btn-main {
-                width: 100%;
-                padding: 16px;
-                border-radius: 12px;
-                border: none;
-                background: linear-gradient(45deg, var(--primary), var(--accent));
-                color: white;
-                font-size: 17px;
-                font-weight: bold;
-                cursor: pointer;
-                margin-top: 15px;
-            }
+        /* --- تعديل أزرار الأولوية لتصبح قابلة للضغط وواضحة --- */
+        .priority-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
 
-            #ticketOverlay,
-            #doneOverlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.85);
-                backdrop-filter: blur(8px);
-                z-index: 1000;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-            }
+        .prio-btn {
+            flex: 1;
+            position: relative;
+        }
 
-            .ticket,
-            .done-card {
-                background: var(--card-bg);
-                width: 85%;
-                max-width: 350px;
-                border-radius: 30px;
-                padding: 30px;
-                text-align: center;
-            }
+        .prio-btn input {
+            display: none;
+        }
 
-            .ticket-num {
-                font-size: 70px;
-                font-weight: 900;
-                color: var(--primary);
-                margin: 10px 0;
-            }
+        .prio-label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s all ease;
+            background: white;
+            color: #666;
+        }
 
-            .stars {
-                margin: 20px 0;
-                font-size: 30px;
-                color: #ddd;
-                cursor: pointer;
-            }
+        /* تنسيق الزر العادي عند الاختيار */
+        .prio-btn input[value="عادية"]:checked + .prio-label {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
 
-            .stars i.active {
-                color: #f1c40f;
-            }
-        </style>
-    </head>
+        /* تنسيق الزر المستعجل عند الاختيار */
+        .prio-btn input[value="مستعجلة"]:checked + .prio-label {
+            border-color: var(--danger);
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 5px 15px rgba(239, 35, 60, 0.3);
+        }
 
-    <body>
+        .prio-label:hover {
+            transform: translateY(-2px);
+            background: #f8f9fa;
+        }
 
-        <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
 
-        <div id="welcomeOverlay">
-            <i class="fas fa-university" style="font-size: 80px; margin-bottom: 20px;"></i>
-            <h1 style="margin: 0;">جامعة المستقبل</h1>
-            <p>نظام المراجعة الإلكتروني الذكي</p>
-            <button class="start-btn" onclick="activateSystem()">دخول  الموقع  </button>
-        </div>
+        #ticketOverlay, #doneOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
 
-        <div class="container">
-            <div class="main-card">
-                <h2>حجز تذكرة دور</h2>
+        .ticket, .done-card {
+            background: var(--card-bg);
+            width: 85%;
+            max-width: 350px;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+        }
 
-                <div class="input-group">
-                    <label>الاسم الثلاثي</label>
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="name" placeholder="أدخل اسمك فقط"
-                        oninput="this.value = this.value.replace(/[0-9]/g, '')">
-                </div>
+        .ticket-num {
+            font-size: 70px;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 10px 0;
+        }
 
-                <div class="input-group">
-                    <label>الرقم الجامعي</label>
-                    <i class="fas fa-hashtag"></i>
-                    <input type="text" id="stuID" placeholder="رقم الهوية الجامعية">
-                </div>
+        .stars {
+            margin: 20px 0;
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+        }
 
-                <div class="input-group">
-                    <label>رقم الهاتف</label>
-                    <i class="fas fa-phone"></i>
-                    <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                </div>
+        .stars i.active {
+            color: #f1c40f;
+        }
+    </style>
+</head>
 
-                <div class="input-group">
-                    <label>نوع المعاملة</label><i class="fas fa-info-circle"></i>
-                    <select id="reason">
-                        <option value="">-- اختر السبب --</option>
-                        <option value="استلام هوية">استلام هوية جامعية</option>
-                        <option value="تأييد استمرار">تأييد استمرار بالدراسة</option>
-                        <option value="وثيقة تخرج">طلب وثيقة تخرج</option>
-                        <option value="تسديد أجور">تسديد أجور دراسية</option>
-                        <option value="براءة ذمة">إجراء براءة ذمة</option>
-                    </select>
-                </div>
+<body>
 
-                <div class="input-group">
-                    <label>الأولوية</label>
-                    <div style="display: flex; gap: 10px;">
-                        <label style="flex:1;"><input type="radio" name="prio" value="عادية" checked
-                                style="display:none;">
-                            <div style="padding:10px; border:1px solid #ddd; border-radius:10px; cursor:pointer;"
-                                onclick="this.previousElementSibling.click()">عادية</div>
-                        </label>
-                        <label style="flex:1;"><input type="radio" name="prio" value="مستعجلة" style="display:none;">
-                            <div style="padding:10px; border:1px solid #ddd; border-radius:10px; cursor:pointer; color:red;"
-                                onclick="this.previousElementSibling.click()">مستعجلة 🔥</div>
-                        </label>
+    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+
+    <div id="welcomeOverlay">
+        <i class="fas fa-university" style="font-size: 80px; margin-bottom: 20px;"></i>
+        <h1 style="margin: 0;">جامعة المستقبل</h1>
+        <p>نظام المراجعة الإلكتروني الذكي</p>
+        <button class="start-btn" onclick="activateSystem()">دخول الموقع </button>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <h2>حجز تذكرة دور</h2>
+
+            <div class="input-group">
+                <label>الاسم الثلاثي</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" placeholder="أدخل اسمك الكامل" oninput="this.value = this.value.replace(/[0-9]/g, '')">
+            </div>
+
+            <div class="input-group">
+                <label>الرقم الجامعي</label>
+                <i class="fas fa-hashtag"></i>
+                <input type="text" id="stuID" placeholder="رقم الهوية الجامعية">
+            </div>
+
+            <div class="input-group">
+                <label>رقم الهاتف</label>
+                <i class="fas fa-phone"></i>
+                <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+
+            <div class="input-group">
+                <label>نوع المعاملة</label>
+                <i class="fas fa-info-circle" style="top: 38px;"></i>
+                <select id="reason">
+                    <option value="">-- اختر السبب --</option>
+                    <option value="استلام هوية">استلام هوية جامعية</option>
+                    <option value="تأييد استمرار">تأييد استمرار بالدراسة</option>
+                    <option value="وثيقة تخرج">طلب وثيقة تخرج</option>
+                    <option value="تسديد أجور">تسديد أجور دراسية</option>
+                    <option value="براءة ذمة">إجراء براءة ذمة</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>الأولوية</label>
+                <div class="priority-options">
+                    <div class="prio-btn">
+                        <input type="radio" name="prio" id="normal" value="عادية" checked>
+                        <label for="normal" class="prio-label">عادية</label>
+                    </div>
+                    <div class="prio-btn">
+                        <input type="radio" name="prio" id="urgent" value="مستعجلة">
+                        <label for="urgent" class="prio-label" style="border-color: #ffcccb; color: #d90429;">مستعجلة 🔥</label>
                     </div>
                 </div>
-
-                <button class="btn-main" onclick="confirmBooking()">تأكيد الحجز الآن</button>
             </div>
-        </div>
 
-        <div id="ticketOverlay">
-            <div class="ticket">
-                <p>رقم تذكرتك هو</p>
-                <div class="ticket-num" id="tValue">---</div>
-                <div id="statusBadge" style="color:orange; font-weight:bold;">انتظر دورك...</div>
+            <button class="btn-main" onclick="confirmBooking()">تأكيد الحجز الآن</button>
+        </div>
+    </div>
+
+    <div id="ticketOverlay">
+        <div class="ticket">
+            <p>رقم تذكرتك هو</p>
+            <div class="ticket-num" id="tValue">---</div>
+            <div id="statusBadge" style="color:orange; font-weight:bold;">انتظر دورك...</div>
+        </div>
+    </div>
+
+    <div id="doneOverlay">
+        <div class="done-card">
+            <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success);"></i>
+            <h2>تم الإنجاز!</h2>
+            <p>قيم تجربتك</p>
+            <div class="stars" id="starRating">
+                <i class="fas fa-star" onclick="rate(1)"></i>
+                <i class="fas fa-star" onclick="rate(2)"></i>
+                <i class="fas fa-star" onclick="rate(3)"></i>
+                <i class="fas fa-star" onclick="rate(4)"></i>
+                <i class="fas fa-star" onclick="rate(5)"></i>
             </div>
+            <button class="btn-main" onclick="location.reload()">خروج</button>
         </div>
+    </div>
 
-        <div id="doneOverlay">
-            <div class="done-card">
-                <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success);"></i>
-                <h2>تم الإنجاز!</h2>
-                <p>قيم تجربتك</p>
-                <div class="stars" id="starRating">
-                    <i class="fas fa-star" onclick="rate(1)"></i>
-                    <i class="fas fa-star" onclick="rate(2)"></i>
-                    <i class="fas fa-star" onclick="rate(3)"></i>
-                    <i class="fas fa-star" onclick="rate(4)"></i>
-                    <i class="fas fa-star" onclick="rate(5)"></i>
-                </div>
-                <button class="btn-main" onclick="location.reload()">خروج</button>
-            </div>
-        </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDj_p6Aqo7FuqEurK-yL7LFIUATA4-cG8I",
+            authDomain: "hakthin-c6812.firebaseapp.com",
+            databaseURL: "https://hakthin-c6812-default-rtdb.firebaseio.com/",
+            projectId: "hakthin-c6812",
+            appId: "1:208156149096:web:1c2676ed0eb66b8cc502dd"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const sound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-        <script>
-            const firebaseConfig = {
-                apiKey: "AIzaSyDj_p6Aqo7FuqEurK-yL7LFIUATA4-cG8I",
-                authDomain: "hakthin-c6812.firebaseapp.com",
-                databaseURL: "https://hakthin-c6812-default-rtdb.firebaseio.com/",
-                projectId: "hakthin-c6812",
-                appId: "1:208156149096:web:1c2676ed0eb66b8cc502dd"
-            };
-            firebase.initializeApp(firebaseConfig);
-            const db = firebase.database();
-            const sound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        function toggleTheme() { document.body.classList.toggle('dark-mode'); }
+        function activateSystem() { sound.play().then(() => { sound.pause(); document.getElementById('welcomeOverlay').style.display = 'none'; }); }
 
-            function toggleTheme() { document.body.classList.toggle('dark-mode'); }
-            function activateSystem() { sound.play().then(() => { sound.pause(); document.getElementById('welcomeOverlay').style.display = 'none'; }); }
+        function confirmBooking() {
+            const name = document.getElementById('name').value;
+            const sid = document.getElementById('stuID').value;
+            const phone = document.getElementById('phone').value;
+            const reason = document.getElementById('reason').value;
+            const priority = document.querySelector('input[name="prio"]:checked').value;
 
-            function confirmBooking() {
-                const name = document.getElementById('name').value;
-                const sid = document.getElementById('stuID').value;
-                const phone = document.getElementById('phone').value;
-                const reason = document.getElementById('reason').value;
-                const priority = document.querySelector('input[name="prio"]:checked').value;
+            if (!name || !sid || !phone || !reason) return alert("يرجى إكمال جميع الحقول");
+            if (phone.length < 11) return alert("رقم الهاتف يجب أن يكون 11 رقم");
 
-                if (!name || !sid || !phone || !reason) return alert("أكمل جميع الحقول");
-                if (phone.length < 11) return alert("رقم الهاتف يجب أن يكون 11 رقم");
+            const ticket = Math.floor(100 + Math.random() * 899);
+            const ref = db.ref('queue/').push();
 
-                const ticket = Math.floor(100 + Math.random() * 899);
-                const ref = db.ref('queue/').push();
+            ref.set({ name, sid, phone, reason, ticket, priority, status: 'انتظار' });
 
-                ref.set({ name, sid, phone, reason, ticket, priority, status: 'انتظار' });
+            document.getElementById('tValue').innerText = ticket;
+            document.getElementById('ticketOverlay').style.display = 'flex';
 
-                document.getElementById('tValue').innerText = ticket;
-                document.getElementById('ticketOverlay').style.display = 'flex';
+            ref.on('value', (snap) => {
+                if (!snap.val()) return;
+                if (snap.val().status === 'حان دورك') {
+                    sound.play();
+                    document.getElementById('statusBadge').innerText = "🔔 حان دورك الآن!";
+                    document.getElementById('statusBadge').style.color = "var(--success)";
+                }
+                if (snap.val().status === 'تم الإنجاز') {
+                    document.getElementById('ticketOverlay').style.display = 'none';
+                    document.getElementById('doneOverlay').style.display = 'flex';
+                }
+            });
+        }
 
-                ref.on('value', (snap) => {
-                    if (!snap.val()) return;
-                    if (snap.val().status === 'حان دورك') {
-                        sound.play();
-                        document.getElementById('statusBadge').innerText = "🔔 حان دورك الآن!";
-                        document.getElementById('statusBadge').style.color = "var(--success)";
-                    }
-                    if (snap.val().status === 'تم الإنجاز') {
-                        document.getElementById('ticketOverlay').style.display = 'none';
-                        document.getElementById('doneOverlay').style.display = 'flex';
-                    }
-                });
-            }
-
-            function rate(n) {
-                const stars = document.querySelectorAll('#starRating i');
-                stars.forEach((s, i) => s.classList.toggle('active', i < n));
-            }
-        </script>
-    </body>
-
+        function rate(n) {
+            const stars = document.querySelectorAll('#starRating i');
+            stars.forEach((s, i) => s.classList.toggle('active', i < n));
+        }
+    </script>
+</body>
 </html>
