@@ -5,61 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول | جامعة المستقبل</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
-        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #4361ee, #4cc9f0); background-size: cover; background-position: center; }
-        .wrapper { width: 420px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, .2); backdrop-filter: blur(20px); box-shadow: 0 0 10px rgba(0, 0, 0, .2); color: #fff; border-radius: 10px; padding: 30px 40px; }
-        .wrapper h1 { font-size: 36px; text-align: center; }
-        .wrapper .input-box { position: relative; width: 100%; height: 50px; margin: 30px 0; }
-        .input-box input { width: 100%; height: 100%; background: transparent; border: none; outline: none; border: 2px solid rgba(255, 255, 255, .2); border-radius: 40px; font-size: 16px; color: #fff; padding: 20px 45px 20px 20px; }
-        .input-box input::placeholder { color: #fff; }
-        .input-box i { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; }
-        .wrapper .remember-forgot { display: flex; justify-content: space-between; font-size: 14.5px; margin: -15px 0 15px; }
-        .remember-forgot label input { accent-color: #fff; margin-left: 3px; }
-        .remember-forgot a { color: #fff; text-decoration: none; }
-        .remember-forgot a:hover { text-decoration: underline; }
-        .wrapper .btn { width: 100%; height: 45px; background: #fff; border: none; outline: none; border-radius: 40px; box-shadow: 0 0 10px rgba(0, 0, 0, .1); cursor: pointer; font-size: 16px; color: #333; font-weight: 600; }
-        .wrapper .register-link { font-size: 14.5px; text-align: center; margin: 20px 0 15px; }
-        .register-link p a { color: #fff; text-decoration: none; font-weight: 600; }
-        .register-link p a:hover { text-decoration: underline; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        /* تنسيق الخلفية المتحركة */
+        #particles-js {
+            position: fixed; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            z-index: -1;
+        }
+
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+
+        .wrapper {
+            width: 420px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px); border-radius: 20px;
+            padding: 40px; color: #fff; text-align: center;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+        }
+
+        .logo-img { width: 100px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
+
+        h1 { font-size: 28px; margin-bottom: 25px; font-weight: bold; }
+
+        .input-box { position: relative; width: 100%; height: 50px; margin: 25px 0; }
+        .input-box input {
+            width: 100%; height: 100%; background: rgba(255,255,255,0.1);
+            border: none; outline: none; border-radius: 12px;
+            color: #fff; padding: 0 45px 0 20px; font-size: 16px;
+            transition: 0.3s; border: 1px solid transparent;
+        }
+        .input-box input:focus { border-color: #4cc9f0; background: rgba(255,255,255,0.15); }
+        .input-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #4cc9f0; }
+
+        .btn {
+            width: 100%; height: 50px; background: #4361ee; border: none;
+            border-radius: 12px; color: white; font-size: 18px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #4cc9f0; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
-    <div class="wrapper">
+
+    <div id="particles-js"></div> <div class="wrapper">
         <form id="loginForm">
-            <h1>تسجيل الدخول</h1>
+            <img src="https://uomus.edu.iq/img/logo.png" alt="شعار جامعة المستقبل" class="logo-img">
+            <h1>دخول الموظفين</h1>
+            
             <div class="input-box">
                 <input type="text" id="username" placeholder="اسم المستخدم" required>
                 <i class='bx bxs-user'></i>
             </div>
+            
             <div class="input-box">
                 <input type="password" id="password" placeholder="كلمة المرور" required>
                 <i class='bx bxs-lock-alt' ></i>
             </div>
-            <div class="remember-forgot">
-                <label><input type="checkbox"> تذكرني</label>
-                <a href="#">نسيت كلمة السر؟</a>
-            </div>
-            <button type="submit" class="btn">دخول</button>
-            <div class="register-link">
-                <p>ليس لديك حساب؟ <a href="#">اتصل بالإدارة</a></p>
-            </div>
+
+            <button type="submit" class="btn">تسجيل الدخول</button>
+            <p style="margin-top: 20px; font-size: 13px; opacity: 0.7;">نظام المراجعة الذكي v2.0</p>
         </form>
     </div>
 
     <script>
-        // برمجة بسيطة لتأكيد الدخول
+        // إعداد الخلفية المتحركة
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#4cc9f0" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 3 }
+            },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "repulse" } }
+            }
+        });
+
+        // نظام تسجيل الدخول مع الجلسة المؤقتة
         document.getElementById('loginForm').onsubmit = function(e) {
             e.preventDefault();
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
-            // يمكنك تغيير اسم المستخدم وكلمة السر هنا
             if(user === "admin" && pass === "future2026") {
-                alert("تم تسجيل الدخول بنجاح!");
-                window.location.href = "admin.html"; // يوجهك للوحة الموظف
+                // استخدام sessionStorage لجعل الدخول ينتهي عند قفل الصفحة أو تحديثها
+                sessionStorage.setItem("isLoggedIn", "true");
+                window.location.href = "admin.html";
             } else {
-                alert("خطأ في اسم المستخدم أو كلمة السر!");
+                alert("بيانات الدخول غير صحيحة!");
             }
         }
     </script>
