@@ -35,18 +35,6 @@
         }
         .stat-card h3 { font-size: 32px; margin: 10px 0; color: var(--primary); }
 
-        /* News Management */
-        .news-manager { 
-            background: var(--card); border-radius: 20px; padding: 25px; 
-            margin-bottom: 25px; border-top: 5px solid var(--success);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .news-input-group { display: flex; gap: 10px; margin-top: 15px; }
-        input[type="text"] { 
-            flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border);
-            background: var(--bg); color: var(--text); outline: none;
-        }
-
         /* Table Area */
         .table-card { 
             background: var(--card); border-radius: 20px; padding: 20px; 
@@ -75,14 +63,10 @@
 <body>
 
 <script>
-    // نظام الحماية: يمنع الدخول بدون تسجيل أو عند التحديث
+    // نظام الحماية
     if (sessionStorage.getItem("isLoggedIn") !== "true") {
         window.location.href = "login.html";
     }
-    // مسح الجلسة لضمان طلب التسجيل عند التحديث (حسب طلبك)
-    window.onbeforeunload = function() {
-        sessionStorage.removeItem("isLoggedIn");
-    };
 </script>
 
 <div class="container">
@@ -98,15 +82,6 @@
         </div>
     </div>
 
-    <div class="news-manager">
-        <h3><i class="fas fa-bullhorn"></i> شريط الأخبار الحية للطالب</h3>
-        <div class="news-input-group">
-            <input type="text" id="newsInput" placeholder="اكتب خبراً ليظهر فوراً في هواتف الطلاب...">
-            <button onclick="publishNews()" class="btn btn-call">نشر الآن</button>
-        </div>
-        <div id="activeNews" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;"></div>
-    </div>
-
     <div class="stats-grid">
         <div class="stat-card"><h3 id="statTotal">0</h3><p>إجمالي الحجوزات</p></div>
         <div class="stat-card" style="border-color: var(--danger);"><h3 id="statUrgent" style="color: var(--danger);">0</h3><p>حالات مستعجلة</p></div>
@@ -114,7 +89,7 @@
     </div>
 
     <div class="table-card">
-        <table>
+        <table id="adminTable">
             <thead>
                 <tr>
                     <th>تذكرة</th>
@@ -125,8 +100,7 @@
                     <th>الإجراءات</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
-                </tbody>
+            <tbody id="tableBody"></tbody>
         </table>
     </div>
 </div>
@@ -144,29 +118,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // دالة نشر الأخبار
-    function publishNews() {
-        const text = document.getElementById('newsInput').value;
-        if(text) {
-            db.ref('news/').push({ text: text });
-            document.getElementById('newsInput').value = "";
-        }
-    }
-
-    // عرض وحذف الأخبار
-    db.ref('news/').on('value', snap => {
-        const list = document.getElementById('activeNews');
-        list.innerHTML = "";
-        snap.forEach(child => {
-            list.innerHTML += `
-                <div style="background:var(--bg); padding:8px 15px; border-radius:30px; border:1px solid var(--primary); font-size:13px;">
-                    ${child.val().text} 
-                    <i class="fas fa-times-circle" style="color:var(--danger); cursor:pointer; margin-right:8px;" onclick="db.ref('news/${child.key}').remove()"></i>
-                </div>`;
-        });
-    });
-
-    // إدارة جدول المراجعين
+    // إدارة جدول المراجعين وتحديث الإحصائيات
     db.ref('queue/').on('value', (snap) => {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = "";
@@ -205,7 +157,7 @@
 
     function exportToExcel() {
         const table = document.getElementById("adminTable");
-        const html = table ? table.outerHTML : "<table>" + document.getElementById("tableBody").parentNode.innerHTML + "</table>";
+        const html = table.outerHTML;
         const url = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
         const link = document.createElement("a");
         link.download = "تقرير_مراجعين_المستقبل.xls";
