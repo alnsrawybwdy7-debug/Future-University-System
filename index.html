@@ -126,10 +126,10 @@
             box-sizing: border-box;
         }
 
-        /* --- تعديل أزرار الأولوية لتصبح قابلة للضغط وواضحة --- */
+        /* تنسيق أزرار الأولوية */
         .priority-options {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             margin-top: 5px;
         }
 
@@ -145,34 +145,27 @@
         .prio-label {
             display: block;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s all ease;
-            background: white;
-            color: #666;
+            transition: 0.3s;
+            background: #fff;
+            text-align: center;
         }
 
-        /* تنسيق الزر العادي عند الاختيار */
+        /* الحالة عند اختيار "عادية" */
         .prio-btn input[value="عادية"]:checked + .prio-label {
-            border-color: var(--primary);
             background: var(--primary);
             color: white;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            border-color: var(--primary);
         }
 
-        /* تنسيق الزر المستعجل عند الاختيار */
+        /* الحالة عند اختيار "مستعجلة" */
         .prio-btn input[value="مستعجلة"]:checked + .prio-label {
-            border-color: var(--danger);
             background: var(--danger);
             color: white;
-            box-shadow: 0 5px 15px rgba(239, 35, 60, 0.3);
-        }
-
-        .prio-label:hover {
-            transform: translateY(-2px);
-            background: #f8f9fa;
+            border-color: var(--danger);
         }
 
         .btn-main {
@@ -186,7 +179,6 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
         }
 
         #ticketOverlay, #doneOverlay {
@@ -251,19 +243,22 @@
             <div class="input-group">
                 <label>الاسم الثلاثي</label>
                 <i class="fas fa-user"></i>
-                <input type="text" id="name" placeholder="أدخل اسمك الكامل" oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                <input type="text" id="name" placeholder="أدخل اسمك فقط"
+                    oninput="this.value = this.value.replace(/[0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>الرقم الجامعي</label>
                 <i class="fas fa-hashtag"></i>
-                <input type="text" id="stuID" placeholder="رقم الهوية الجامعية">
+                <input type="text" id="stuID" placeholder="أدخل الأرقام فقط"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>رقم الهاتف</label>
                 <i class="fas fa-phone"></i>
-                <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
@@ -283,12 +278,12 @@
                 <label>الأولوية</label>
                 <div class="priority-options">
                     <div class="prio-btn">
-                        <input type="radio" name="prio" id="normal" value="عادية" checked>
-                        <label for="normal" class="prio-label">عادية</label>
+                        <input type="radio" name="prio" id="p1" value="عادية" checked>
+                        <label for="p1" class="prio-label">عادية</label>
                     </div>
                     <div class="prio-btn">
-                        <input type="radio" name="prio" id="urgent" value="مستعجلة">
-                        <label for="urgent" class="prio-label" style="border-color: #ffcccb; color: #d90429;">مستعجلة 🔥</label>
+                        <input type="radio" name="prio" id="p2" value="مستعجلة">
+                        <label for="p2" class="prio-label">مستعجلة 🔥</label>
                     </div>
                 </div>
             </div>
@@ -345,7 +340,7 @@
             const reason = document.getElementById('reason').value;
             const priority = document.querySelector('input[name="prio"]:checked').value;
 
-            if (!name || !sid || !phone || !reason) return alert("يرجى إكمال جميع الحقول");
+            if (!name || !sid || !phone || !reason) return alert("أكمل جميع الحقول");
             if (phone.length < 11) return alert("رقم الهاتف يجب أن يكون 11 رقم");
 
             const ticket = Math.floor(100 + Math.random() * 899);
@@ -376,4 +371,5 @@
         }
     </script>
 </body>
+
 </html>
