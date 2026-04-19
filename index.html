@@ -8,22 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
+            --primary: #4361ee;
+            --secondary: #4cc9f0;
+            --danger: #ef233c;
+            --success: #06d6a0;
             --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-color: #2b2d42;
-            --input-bg: #ffffff;
-            --primary: #4361ee;
-            --accent: #4cc9f0;
-            --success: #06d6a0;
-            --danger: #ef233c;
         }
 
         .dark-mode {
             --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             --card-bg: rgba(25, 25, 35, 0.95);
             --text-color: #e0e0e0;
-            --input-bg: #2d3436;
-            --primary: #4cc9f0;
         }
 
         body {
@@ -38,6 +35,7 @@
             transition: 0.5s;
         }
 
+        /* زر وضع الليل */
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -50,35 +48,41 @@
             color: var(--primary);
             font-size: 20px;
             z-index: 10001;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
+        /* شاشة الترحيب */
         #welcomeOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #4361ee, #4cc9f0);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
+            text-align: center;
         }
 
         .start-btn {
             padding: 18px 50px;
             background: white;
-            color: #4361ee;
+            color: var(--primary);
             border: none;
             border-radius: 50px;
             font-size: 22px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 25px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
         }
 
+        /* البطاقة الرئيسية */
         .container {
             width: 100%;
             max-width: 450px;
@@ -92,77 +96,80 @@
             padding: 35px 25px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .input-group {
             position: relative;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-align: right;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 5px;
         }
 
         .input-group i {
             position: absolute;
             right: 15px;
-            top: 40px;
+            top: 41px;
             color: var(--primary);
             z-index: 5;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
         input, select {
             width: 100%;
-            padding: 12px 40px 12px 12px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            background-color: var(--input-bg);
-            color: var(--text-color);
+            padding: 13px 45px 13px 15px;
+            border-radius: 15px;
+            border: 1.5px solid #dee2e6;
+            background-color: #fff;
+            color: #333;
             font-size: 15px;
             box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
         }
 
-        /* تنسيق أزرار الأولوية */
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(67, 97, 238, 0.15);
+        }
+
+        /* تصميم أزرار الأولوية (مستعجلة/عادية) */
         .priority-options {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 5px;
         }
 
-        .prio-btn {
-            flex: 1;
-            position: relative;
-        }
-
-        .prio-btn input {
-            display: none;
-        }
-
+        .prio-item { flex: 1; }
+        .prio-item input { display: none; }
+        
         .prio-label {
             display: block;
             padding: 12px;
-            border: 1px solid #ddd;
+            background: #fff;
+            border: 2px solid #eee;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
-            background: #fff;
             text-align: center;
         }
 
-        /* الحالة عند اختيار "عادية" */
-        .prio-btn input[value="عادية"]:checked + .prio-label {
+        /* تأثير الضغط على عادية */
+        #p-normal:checked + .prio-label {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
 
-        /* الحالة عند اختيار "مستعجلة" */
-        .prio-btn input[value="مستعجلة"]:checked + .prio-label {
+        /* تأثير الضغط على مستعجلة */
+        #p-urgent:checked + .prio-label {
             background: var(--danger);
             color: white;
             border-color: var(--danger);
@@ -171,23 +178,22 @@
         .btn-main {
             width: 100%;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 15px;
             border: none;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 20px;
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
         }
 
+        /* التذكرة والنجاح */
         #ticketOverlay, #doneOverlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             z-index: 10000;
@@ -201,7 +207,7 @@
             width: 85%;
             max-width: 350px;
             border-radius: 30px;
-            padding: 30px;
+            padding: 35px;
             text-align: center;
         }
 
@@ -209,19 +215,11 @@
             font-size: 70px;
             font-weight: 900;
             color: var(--primary);
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
-        .stars {
-            margin: 20px 0;
-            font-size: 30px;
-            color: #ddd;
-            cursor: pointer;
-        }
-
-        .stars i.active {
-            color: #f1c40f;
-        }
+        .stars { margin: 20px 0; font-size: 30px; color: #ddd; cursor: pointer; }
+        .stars i.active { color: #f1c40f; }
     </style>
 </head>
 
@@ -231,39 +229,39 @@
 
     <div id="welcomeOverlay">
         <i class="fas fa-university" style="font-size: 80px; margin-bottom: 20px;"></i>
-        <h1 style="margin: 0;">جامعة المستقبل</h1>
+        <h1>جامعة المستقبل</h1>
         <p>نظام المراجعة الإلكتروني الذكي</p>
-        <button class="start-btn" onclick="activateSystem()">دخول الموقع </button>
+        <button class="start-btn" onclick="activateSystem()">دخول الموقع</button>
     </div>
 
     <div class="container">
         <div class="main-card">
-            <h2>حجز تذكرة دور</h2>
+            <h2 style="margin-top: 0;">حجز تذكرة دور</h2>
 
             <div class="input-group">
                 <label>الاسم الثلاثي</label>
                 <i class="fas fa-user"></i>
-                <input type="text" id="name" placeholder="أدخل اسمك فقط"
-                    oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                <input type="text" id="name" placeholder="أدخل اسمك فقط" 
+                       oninput="this.value = this.value.replace(/[0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>الرقم الجامعي</label>
                 <i class="fas fa-hashtag"></i>
-                <input type="text" id="stuID" placeholder="أدخل الأرقام فقط"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="text" id="stuID" placeholder="رقم الهوية الجامعية (أرقام فقط)" 
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>رقم الهاتف</label>
                 <i class="fas fa-phone"></i>
-                <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11" 
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>نوع المعاملة</label>
-                <i class="fas fa-info-circle" style="top: 38px;"></i>
+                <i class="fas fa-info-circle" style="top: 41px;"></i>
                 <select id="reason">
                     <option value="">-- اختر السبب --</option>
                     <option value="استلام هوية">استلام هوية جامعية</option>
@@ -277,13 +275,13 @@
             <div class="input-group">
                 <label>الأولوية</label>
                 <div class="priority-options">
-                    <div class="prio-btn">
-                        <input type="radio" name="prio" id="p1" value="عادية" checked>
-                        <label for="p1" class="prio-label">عادية</label>
+                    <div class="prio-item">
+                        <input type="radio" name="prio" id="p-normal" value="عادية" checked>
+                        <label for="p-normal" class="prio-label">عادية</label>
                     </div>
-                    <div class="prio-btn">
-                        <input type="radio" name="prio" id="p2" value="مستعجلة">
-                        <label for="p2" class="prio-label">مستعجلة 🔥</label>
+                    <div class="prio-item">
+                        <input type="radio" name="prio" id="p-urgent" value="مستعجلة">
+                        <label for="p-urgent" class="prio-label" style="color: #d90429;">مستعجلة 🔥</label>
                     </div>
                 </div>
             </div>
@@ -296,15 +294,15 @@
         <div class="ticket">
             <p>رقم تذكرتك هو</p>
             <div class="ticket-num" id="tValue">---</div>
-            <div id="statusBadge" style="color:orange; font-weight:bold;">انتظر دورك...</div>
+            <div id="statusBadge" style="color:orange; font-weight:bold; font-size: 18px;">انتظر دورك...</div>
         </div>
     </div>
 
     <div id="doneOverlay">
         <div class="done-card">
-            <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success);"></i>
+            <i class="fas fa-check-circle" style="font-size: 70px; color: var(--success);"></i>
             <h2>تم الإنجاز!</h2>
-            <p>قيم تجربتك</p>
+            <p>قيم تجربتك مع الخدمة</p>
             <div class="stars" id="starRating">
                 <i class="fas fa-star" onclick="rate(1)"></i>
                 <i class="fas fa-star" onclick="rate(2)"></i>
@@ -319,6 +317,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
+        // إعدادات Firebase الخاصة بك (بقيت كما هي)
         const firebaseConfig = {
             apiKey: "AIzaSyDj_p6Aqo7FuqEurK-yL7LFIUATA4-cG8I",
             authDomain: "hakthin-c6812.firebaseapp.com",
@@ -371,5 +370,4 @@
         }
     </script>
 </body>
-
 </html>
