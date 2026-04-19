@@ -8,19 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #4cc9f0;
+            --primary: #004aad;
+            --secondary: #0466c8;
+            --accent: #00b4d8;
             --danger: #ef233c;
             --success: #06d6a0;
-            --bg-color: #f0f2f5;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.92);
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-color);
+            /* خلفية متدرجة حديثة */
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
             height: 100vh;
             display: flex;
             align-items: center;
@@ -29,50 +30,49 @@
             position: relative;
         }
 
-        /* الشعار المتحرك في الخلفية */
-        .background-logo {
+        /* اللوغو المتحرك في الخلفية (كود CSS) */
+        .bg-logo-icon {
             position: absolute;
-            z-index: -1;
-            width: 400px;
-            opacity: 0.1; /* شفافية عالية ليكون خلفية */
-            animation: logoFloat 10s ease-in-out infinite;
-        }
-
-        @keyframes logoFloat {
-            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.05; }
-            50% { transform: scale(1.2) rotate(10deg); opacity: 0.15; }
-        }
-
-        /* زر وضع الليل */
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: white;
-            border: none;
-            padding: 12px;
-            border-radius: 50%;
-            cursor: pointer;
+            font-size: 400px;
             color: var(--primary);
-            z-index: 10001;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0.05;
+            z-index: -1;
+            animation: rotateLogo 20s linear infinite;
+        }
+
+        @keyframes rotateLogo {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1.1); }
         }
 
         /* شاشة الترحيب */
         #welcomeOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
+            transition: 0.5s;
+        }
+
+        .welcome-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .start-btn {
-            padding: 15px 40px;
+            padding: 15px 45px;
             background: white;
             color: var(--primary);
             border: none;
@@ -80,14 +80,14 @@
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 30px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* بطاقة الحجز الزجاجية */
+        /* بطاقة الحجز */
         .container {
             width: 100%;
-            max-width: 430px;
+            max-width: 420px;
             padding: 20px;
             z-index: 10;
         }
@@ -95,16 +95,16 @@
         .main-card {
             background: var(--card-bg);
             backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 35px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.6);
             text-align: center;
         }
 
         .input-group {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             text-align: right;
         }
 
@@ -113,12 +113,13 @@
             margin-bottom: 8px;
             font-weight: 600;
             font-size: 14px;
-            color: #444;
+            color: #555;
+            padding-right: 5px;
         }
 
         .input-group i {
             position: absolute;
-            right: 15px;
+            right: 18px;
             top: 42px;
             color: var(--primary);
             z-index: 5;
@@ -126,123 +127,135 @@
 
         input, select {
             width: 100%;
-            padding: 12px 45px 12px 15px;
-            border-radius: 12px;
-            border: 1.5px solid #ddd;
+            padding: 14px 50px 14px 15px;
+            border-radius: 15px;
+            border: 1.5px solid #dce1e6;
             font-size: 15px;
             box-sizing: border-box;
             outline: none;
             transition: 0.3s;
+            background: white;
         }
 
         input:focus, select:focus {
             border-color: var(--primary);
-            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 74, 173, 0.1);
         }
 
-        /* الأولوية */
+        /* أزرار الأولوية */
         .priority-options {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 5px;
         }
 
         .prio-item { flex: 1; }
         .prio-item input { display: none; }
+        
         .prio-label {
             display: block;
-            padding: 12px;
-            background: #fff;
+            padding: 14px;
+            background: white;
             border: 1.5px solid #eee;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
+            text-align: center;
         }
 
-        #p-normal:checked + .prio-label { background: var(--primary); color: white; }
-        #p-urgent:checked + .prio-label { background: var(--danger); color: white; }
+        #p-normal:checked + .prio-label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        #p-urgent:checked + .prio-label {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
 
         .btn-main {
             width: 100%;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 15px;
             border: none;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background: linear-gradient(45deg, var(--primary), var(--accent));
             color: white;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            margin-top: 20px;
+            box-shadow: 0 10px 25px rgba(0, 74, 173, 0.3);
+            transition: 0.3s;
         }
+
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0, 74, 173, 0.4); }
 
         /* التذكرة والنجاح */
         #ticketOverlay, #doneOverlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(10px);
             z-index: 10000;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
         }
 
         .ticket, .done-card {
             background: white;
             width: 85%;
             max-width: 350px;
-            border-radius: 30px;
-            padding: 30px;
+            border-radius: 40px;
+            padding: 40px;
             text-align: center;
         }
 
-        .ticket-num { font-size: 70px; font-weight: 900; color: var(--primary); margin: 10px 0; }
-        .stars { font-size: 30px; color: #ddd; cursor: pointer; margin: 15px 0; }
+        .ticket-num { font-size: 75px; font-weight: 900; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
+        .stars { font-size: 35px; color: #ddd; cursor: pointer; margin: 20px 0; }
         .stars i.active { color: #f1c40f; }
     </style>
 </head>
 
 <body>
 
-    <img src="https://future.uomus.edu.iq/img/logo.png" class="background-logo" alt="لوجو جامعة المستقبل">
-
-    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <i class="fas fa-graduation-cap bg-logo-icon"></i>
 
     <div id="welcomeOverlay">
-        <img src="https://future.uomus.edu.iq/img/logo.png" width="120" style="margin-bottom: 20px; filter: brightness(0) invert(1);">
-        <h1>جامعة المستقبل</h1>
-        <p>نظام المراجعة الإلكتروني الذكي</p>
-        <button class="start-btn" onclick="activateSystem()">دخول الموقع</button>
+        <i class="fas fa-university welcome-icon"></i>
+        <h1 style="margin: 0; font-size: 32px;">جامعة المستقبل</h1>
+        <p style="opacity: 0.8;">نظام الخدمات الطلابية الإلكتروني</p>
+        <button class="start-btn" onclick="activateSystem()">دخول النظام</button>
     </div>
 
     <div class="container">
         <div class="main-card">
-            <h2 style="margin-bottom: 25px; color: var(--primary);">حجز تذكرة دور</h2>
+            <h2 style="margin-top: 0; color: var(--primary); font-size: 24px;">حجز تذكرة دور</h2>
 
             <div class="input-group">
                 <label>الاسم الثلاثي</label>
                 <i class="fas fa-user"></i>
-                <input type="text" id="name" placeholder="أدخل اسمك فقط" oninput="this.value = this.value.replace(/[0-9]/g, '')">
+                <input type="text" id="name" placeholder="أدخل اسمك الكامل" oninput="this.value = this.value.replace(/[0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>الرقم الجامعي</label>
-                <i class="fas fa-hashtag"></i>
+                <i class="fas fa-id-card"></i>
                 <input type="text" id="stuID" placeholder="أرقام فقط" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>رقم الهاتف</label>
-                <i class="fas fa-phone"></i>
+                <i class="fas fa-phone-alt"></i>
                 <input type="tel" id="phone" placeholder="07XXXXXXXXX" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
 
             <div class="input-group">
                 <label>نوع المعاملة</label>
-                <i class="fas fa-info-circle" style="top: 42px;"></i>
+                <i class="fas fa-file-alt" style="top: 42px;"></i>
                 <select id="reason">
                     <option value="">-- اختر السبب --</option>
                     <option value="استلام هوية">استلام هوية جامعية</option>
@@ -262,7 +275,7 @@
                     </div>
                     <div class="prio-item">
                         <input type="radio" name="prio" id="p-urgent" value="مستعجلة">
-                        <label for="p-urgent" class="prio-label" style="color: #d90429;">مستعجلة 🔥</label>
+                        <label for="p-urgent" class="prio-label" style="color: #d00000;">مستعجلة 🔥</label>
                     </div>
                 </div>
             </div>
@@ -273,17 +286,17 @@
 
     <div id="ticketOverlay">
         <div class="ticket">
-            <p>رقم تذكرتك هو</p>
+            <p style="font-weight: bold; color: #666;">رقم تذكرتك هو</p>
             <div class="ticket-num" id="tValue">---</div>
-            <div id="statusBadge" style="color:orange; font-weight:bold;">انتظر دورك...</div>
+            <div id="statusBadge" style="color:#f39c12; font-weight:bold; font-size: 18px;">يرجى الانتظار...</div>
         </div>
     </div>
 
     <div id="doneOverlay">
         <div class="done-card">
-            <i class="fas fa-check-circle" style="font-size: 60px; color: var(--success);"></i>
-            <h2>تم الإنجاز!</h2>
-            <p>قيم تجربتك</p>
+            <i class="fas fa-check-circle" style="font-size: 70px; color: var(--success);"></i>
+            <h2>تم الإنجاز بنجاح!</h2>
+            <p>كيف كانت تجربتك معنا؟</p>
             <div class="stars" id="starRating">
                 <i class="fas fa-star" onclick="rate(1)"></i>
                 <i class="fas fa-star" onclick="rate(2)"></i>
@@ -291,7 +304,7 @@
                 <i class="fas fa-star" onclick="rate(4)"></i>
                 <i class="fas fa-star" onclick="rate(5)"></i>
             </div>
-            <button class="btn-main" onclick="location.reload()">خروج</button>
+            <button class="btn-main" onclick="location.reload()">إغلاق</button>
         </div>
     </div>
 
@@ -309,8 +322,11 @@
         const db = firebase.database();
         const sound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
-        function toggleTheme() { document.body.style.filter = document.body.style.filter === 'invert(1)' ? 'invert(0)' : 'invert(1)'; }
-        function activateSystem() { sound.play().then(() => { sound.pause(); document.getElementById('welcomeOverlay').style.display = 'none'; }); }
+        function activateSystem() { 
+            sound.play().then(() => { sound.pause(); });
+            document.getElementById('welcomeOverlay').style.opacity = '0';
+            setTimeout(() => { document.getElementById('welcomeOverlay').style.display = 'none'; }, 500);
+        }
 
         function confirmBooking() {
             const name = document.getElementById('name').value;
@@ -319,8 +335,8 @@
             const reason = document.getElementById('reason').value;
             const priority = document.querySelector('input[name="prio"]:checked').value;
 
-            if (!name || !sid || !phone || !reason) return alert("أكمل جميع الحقول");
-            if (phone.length < 11) return alert("رقم الهاتف يجب أن يكون 11 رقم");
+            if (!name || !sid || !phone || !reason) return alert("يرجى ملء جميع الحقول");
+            if (phone.length < 11) return alert("رقم الهاتف غير مكتمل");
 
             const ticket = Math.floor(100 + Math.random() * 899);
             const ref = db.ref('queue/').push();
@@ -331,13 +347,14 @@
             document.getElementById('ticketOverlay').style.display = 'flex';
 
             ref.on('value', (snap) => {
-                if (!snap.val()) return;
-                if (snap.val().status === 'حان دورك') {
+                const data = snap.val();
+                if (!data) return;
+                if (data.status === 'حان دورك') {
                     sound.play();
-                    document.getElementById('statusBadge').innerText = "🔔 حان دورك الآن!";
+                    document.getElementById('statusBadge').innerText = "🔔 توجه إلى الموظف الآن!";
                     document.getElementById('statusBadge').style.color = "var(--success)";
                 }
-                if (snap.val().status === 'تم الإنجاز') {
+                if (data.status === 'تم الإنجاز') {
                     document.getElementById('ticketOverlay').style.display = 'none';
                     document.getElementById('doneOverlay').style.display = 'flex';
                 }
