@@ -3,151 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة استعادة الوصول | جامعة المستقبل</title>
+    <title>دخول الإدارة | جامعة المستقبل</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .reset-card { width: 100%; max-width: 420px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .uom-color { color: #004a99; font-weight: bold; }
-        .btn-primary { background-color: #004a99; border: none; padding: 12px; transition: 0.3s; }
-        .btn-primary:hover { background-color: #003366; }
-        .step-hidden { display: none; }
-        .loader { display: none; }
+        body {
+            background: #0f172a; /* لون داكن احترافي */
+            background-image: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.2) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(29, 78, 216, 0.15) 0%, transparent 40%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* تصميم الكارت مشابه للصورة التي أرفقتها */
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: white;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .university-logo {
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .university-logo img { width: 100%; height: auto; }
+
+        h3 { font-weight: 700; letter-spacing: -0.5px; margin-bottom: 30px; }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3);
+            background: #ffffff;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            width: 100%;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+            color: white;
+        }
+
+        .forgot-link {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 20px;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover { color: #60a5fa; }
     </style>
 </head>
 <body>
 
-<div class="reset-card">
-    <div class="text-center mb-4">
-        <h4 class="uom-color">جامعة المستقبل</h4>
-        <p class="text-muted small">نظام التحقق من هوية المسؤول</p>
+<div class="login-card">
+    <div class="university-logo">
+        <img src="https://uomus.edu.iq/img/logo.png" alt="Logo"> 
     </div>
-
-    <div id="phone-step">
-        <div class="mb-3">
-            <label class="form-label">رقم الهاتف (المسجل في النظام)</label>
-            <input type="text" id="phoneInput" class="form-control text-center" placeholder="مثال: 07718084046">
-        </div>
-        <button onclick="sendWhatsAppOTP()" class="btn btn-primary w-100">
-            إرسال الرمز عبر WhatsApp
-            <span id="loader" class="spinner-border spinner-border-sm ms-2 loader"></span>
-        </button>
+    <h3>دخول الإدارة</h3>
+    
+    <div class="mb-2">
+        <input type="text" id="adminPhone" class="form-control" placeholder="رقم الهاتف (077XXXXXXXX)">
     </div>
-
-    <div id="otp-step" class="step-hidden">
-        <div class="alert alert-success small text-center">تم إرسال الرمز بنجاح!</div>
-        <div class="mb-3">
-            <label class="form-label">رمز التحقق</label>
-            <input type="number" id="otpInput" class="form-control text-center fs-4" placeholder="****">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">كلمة المرور الجديدة</label>
-            <input type="password" id="newPass" class="form-control" placeholder="6 رموز على الأقل">
-        </div>
-        <button onclick="verifyAndUpdate()" class="btn btn-success w-100 p-2">تحديث البيانات</button>
+    <div class="mb-4">
+        <input type="password" id="adminPassword" class="form-control" placeholder="كلمة المرور">
     </div>
+    
+    <button onclick="login()" class="btn btn-login shadow-lg">تسجيل الدخول</button>
+    
+    <br>
+    <a href="reset.html" class="forgot-link">نسيت كلمة السر؟</a>
 </div>
 
 <script>
-    // --- 1. إعدادات الفايربيس (انسخ بياناتك من Console الفايربيس هنا) ---
+    // --- ربط Firebase (ضع بياناتك هنا) ---
     const firebaseConfig = {
         apiKey: "AIzaSy...",
-        authDomain: "your-project.firebaseapp.com",
-        databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-        projectId: "your-project",
-        storageBucket: "your-project.appspot.com",
+        authDomain: "your-app.firebaseapp.com",
+        databaseURL: "https://your-app-default-rtdb.firebaseio.com",
+        projectId: "your-app",
+        storageBucket: "your-app.appspot.com",
         messagingSenderId: "...",
         appId: "..."
     };
+    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- 2. إعدادات Twilio (المأخوذة من لقطات الشاشة والـ Curl مالتك) ---
-    const twilioData = {
-        sid: 'ACd086c08e69d12da4d1c05986c56642e1',
-        token: '9f1e170206febab17f57db00b6557d0b',
-        from: 'whatsapp:+14155238886'
-    };
+    // دالة تسجيل الدخول
+    function login() {
+        const phone = document.getElementById('adminPhone').value.trim();
+        const pass = document.getElementById('adminPassword').value.trim();
 
-    // --- 3. دالة إرسال الرمز ---
-    async function sendWhatsAppOTP() {
-        const phone = document.getElementById('phoneInput').value.trim();
-        const loader = document.getElementById('loader');
+        if(!phone || !pass) {
+            alert("⚠️ يرجى إدخال رقم الهاتف وكلمة المرور");
+            return;
+        }
 
-        if(!phone) return alert("يرجى كتابة الرقم!");
-
-        // التحقق إذا كان الرقم موجود في Firebase
-        db.ref('adminSetting').once('value', async (snap) => {
-            const serverPhone = snap.val().phone;
+        // التحقق من قاعدة البيانات
+        db.ref('adminSetting').once('value', (snap) => {
+            const data = snap.val();
             
-            if (phone !== serverPhone) {
-                alert("⚠️ عذراً، هذا الرقم غير مخول بالوصول!");
-                return;
-            }
-
-            loader.style.display = 'inline-block';
-            const otp = Math.floor(1000 + Math.random() * 9000);
-            sessionStorage.setItem('my_otp', otp);
-
-            // تحويل الرقم للصيغة الدولية للواتساب
-            let formattedPhone = phone.startsWith('0') ? '+964' + phone.substring(1) : phone;
-
-            try {
-                const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilioData.sid}/Messages.json`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Basic ' + btoa(`${twilioData.sid}:${twilioData.token}`),
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'To': `whatsapp:${formattedPhone}`,
-                        'From': twilioData.from,
-                        'Body': `*جامعة المستقبل*\nرمز الأمان الخاص بك هو: [ ${otp} ]`
-                    })
-                });
-
-                loader.style.display = 'none';
-
-                if(response.ok) {
-                    alert("✅ تفقد واتسابك الآن!");
-                    document.getElementById('phone-step').classList.add('step-hidden');
-                    document.getElementById('otp-step').classList.remove('step-hidden');
-                } else {
-                    // Fallback في حال وجود مشكلة في الـ Sandbox
-                    alert("🔒 (وضع العرض) الرمز هو: " + otp);
-                    document.getElementById('phone-step').classList.add('step-hidden');
-                    document.getElementById('otp-step').classList.remove('step-hidden');
-                }
-            } catch (err) {
-                loader.style.display = 'none';
-                alert("🔒 الرمز للطوارئ: " + otp);
-                document.getElementById('phone-step').classList.add('step-hidden');
-                document.getElementById('otp-step').classList.remove('step-hidden');
+            if (data && phone === data.phone && pass === data.password) {
+                alert("✅ أهلاً بك! تم تسجيل الدخول بنجاح.");
+                // هنا تضع رابط صفحة لوحة التحكم الخاصة بك
+                window.location.href = "dashboard.html"; 
+            } else {
+                alert("❌ عذراً، رقم الهاتف أو كلمة المرور غير صحيحة!");
             }
         });
-    }
-
-    // --- 4. دالة التحقق وتحديث الباسورد ---
-    function verifyAndUpdate() {
-        const userOtp = document.getElementById('otpInput').value;
-        const savedOtp = sessionStorage.getItem('my_otp');
-        const pass = document.getElementById('newPass').value;
-
-        if (userOtp == savedOtp) {
-            if(pass.length < 6) return alert("الباسورد ضعيف!");
-
-            db.ref('adminSetting').update({ password: pass })
-            .then(() => {
-                alert("🎉 مبروك! تم تغيير كلمة المرور بنجاح.");
-                window.location.href = "login.html"; // يرجعك لصفحة الدخول
-            });
-        } else {
-            alert("❌ الرمز غير صحيح!");
-        }
     }
 </script>
 
