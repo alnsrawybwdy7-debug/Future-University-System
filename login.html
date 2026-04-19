@@ -3,104 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام استعادة الوصول | جامعة المستقبل</title>
+    <title>بوابة استعادة الوصول | جامعة المستقبل</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <style>
-        :root { --primary-color: #004a99; --secondary-color: #28a745; }
-        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; align-items: center; }
-        .reset-container { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .logo-text { color: var(--primary-color); font-weight: bold; text-align: center; margin-bottom: 25px; }
-        .btn-send { background-color: var(--primary-color); color: white; border: none; padding: 12px; transition: 0.3s; }
-        .btn-send:hover { background-color: #003366; color: white; }
-        .btn-verify { background-color: var(--secondary-color); color: white; border: none; padding: 12px; }
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .reset-card { width: 100%; max-width: 420px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .uom-color { color: #004a99; font-weight: bold; }
+        .btn-primary { background-color: #004a99; border: none; padding: 12px; transition: 0.3s; }
+        .btn-primary:hover { background-color: #003366; }
         .step-hidden { display: none; }
         .loader { display: none; }
     </style>
 </head>
 <body>
 
-<div class="reset-container">
-    <div class="logo-text">
-        <h4>بوابة الوصول الآمن</h4>
-        <p class="text-muted small">جامعة المستقبل</p>
+<div class="reset-card">
+    <div class="text-center mb-4">
+        <h4 class="uom-color">جامعة المستقبل</h4>
+        <p class="text-muted small">نظام التحقق من هوية المسؤول</p>
     </div>
 
-    <div id="step-phone">
+    <div id="phone-step">
         <div class="mb-3">
-            <label class="form-label font-weight-bold">رقم هاتف المسؤول</label>
-            <input type="text" id="phoneInput" class="form-control form-control-lg" placeholder="مثال: 07718084046">
+            <label class="form-label">رقم الهاتف (المسجل في النظام)</label>
+            <input type="text" id="phoneInput" class="form-control text-center" placeholder="مثال: 07718084046">
         </div>
-        <button onclick="checkAndSendOTP()" class="btn btn-send w-100 btn-lg shadow-sm">
-            إرسال الرمز (WhatsApp)
-            <div id="loader" class="spinner-border spinner-border-sm ms-2 loader"></div>
+        <button onclick="sendWhatsAppOTP()" class="btn btn-primary w-100">
+            إرسال الرمز عبر WhatsApp
+            <span id="loader" class="spinner-border spinner-border-sm ms-2 loader"></span>
         </button>
     </div>
 
-    <div id="step-otp" class="step-hidden mt-3">
-        <div class="alert alert-info small text-center">وصلك رمز الآن على واتساب الرقم أعلاه</div>
+    <div id="otp-step" class="step-hidden">
+        <div class="alert alert-success small text-center">تم إرسال الرمز بنجاح!</div>
         <div class="mb-3">
-            <label class="form-label">رمز التحقق (OTP)</label>
+            <label class="form-label">رمز التحقق</label>
             <input type="number" id="otpInput" class="form-control text-center fs-4" placeholder="****">
         </div>
         <div class="mb-3">
             <label class="form-label">كلمة المرور الجديدة</label>
-            <input type="password" id="newPassword" class="form-control" placeholder="أدخل كلمة مرور قوية">
+            <input type="password" id="newPass" class="form-control" placeholder="6 رموز على الأقل">
         </div>
-        <button onclick="verifyAndChangePass()" class="btn btn-verify w-100 btn-lg shadow-sm">تأكيد وتغيير كلمة المرور</button>
+        <button onclick="verifyAndUpdate()" class="btn btn-success w-100 p-2">تحديث البيانات</button>
     </div>
 </div>
 
 <script>
-    // 1. إعدادات الفايربيس (املأ بياناتك هنا)
+    // --- 1. إعدادات الفايربيس (انسخ بياناتك من Console الفايربيس هنا) ---
     const firebaseConfig = {
         apiKey: "AIzaSy...",
-        authDomain: "your-app.firebaseapp.com",
-        databaseURL: "https://your-app-default-rtdb.firebaseio.com",
-        projectId: "your-app",
-        storageBucket: "your-app.appspot.com",
+        authDomain: "your-project.firebaseapp.com",
+        databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+        projectId: "your-project",
+        storageBucket: "your-project.appspot.com",
         messagingSenderId: "...",
         appId: "..."
     };
-    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. إعدادات Twilio (من صورك)
+    // --- 2. إعدادات Twilio (المأخوذة من لقطات الشاشة والـ Curl مالتك) ---
     const twilioData = {
         sid: 'ACd086c08e69d12da4d1c05986c56642e1',
         token: '9f1e170206febab17f57db00b6557d0b',
         from: 'whatsapp:+14155238886'
     };
 
-    // دالة إرسال الرمز
-    async function checkAndSendOTP() {
+    // --- 3. دالة إرسال الرمز ---
+    async function sendWhatsAppOTP() {
         const phone = document.getElementById('phoneInput').value.trim();
         const loader = document.getElementById('loader');
 
-        if(!phone) return alert("يرجى إدخال الرقم أولاً!");
+        if(!phone) return alert("يرجى كتابة الرقم!");
 
-        // التحقق من الرقم في الفايربيس
+        // التحقق إذا كان الرقم موجود في Firebase
         db.ref('adminSetting').once('value', async (snap) => {
-            const serverData = snap.val();
+            const serverPhone = snap.val().phone;
             
-            if (!serverData || phone !== serverData.phone) {
-                alert("⚠️ هذا الرقم غير مسجل كمسؤول للنظام!");
+            if (phone !== serverPhone) {
+                alert("⚠️ عذراً، هذا الرقم غير مخول بالوصول!");
                 return;
             }
 
-            // إذا الرقم صح.. نبدأ عملية الإرسال
             loader.style.display = 'inline-block';
-            const generatedOTP = Math.floor(1000 + Math.random() * 9000);
-            sessionStorage.setItem('current_otp', generatedOTP);
+            const otp = Math.floor(1000 + Math.random() * 9000);
+            sessionStorage.setItem('my_otp', otp);
 
-            // تنسيق الرقم دولياً للواتساب
+            // تحويل الرقم للصيغة الدولية للواتساب
             let formattedPhone = phone.startsWith('0') ? '+964' + phone.substring(1) : phone;
-            
+
             try {
                 const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${twilioData.sid}/Messages.json`, {
                     method: 'POST',
@@ -111,47 +106,47 @@
                     body: new URLSearchParams({
                         'To': `whatsapp:${formattedPhone}`,
                         'From': twilioData.from,
-                        'Body': `*جامعة المستقبل*\n\nرمز التحقق الخاص بك هو: [ ${generatedOTP} ]`
+                        'Body': `*جامعة المستقبل*\nرمز الأمان الخاص بك هو: [ ${otp} ]`
                     })
                 });
 
                 loader.style.display = 'none';
+
                 if(response.ok) {
-                    alert("✅ تم إرسال الرمز لواتساب المسؤول بنجاح");
-                    document.getElementById('step-phone').classList.add('step-hidden');
-                    document.getElementById('step-otp').classList.remove('step-hidden');
+                    alert("✅ تفقد واتسابك الآن!");
+                    document.getElementById('phone-step').classList.add('step-hidden');
+                    document.getElementById('otp-step').classList.remove('step-hidden');
                 } else {
-                    // Fallback للهاكثون في حال الـ Sandbox لم يتم ربطه
-                    alert("🔒 نظام الأمان: الرمز المرسل هو " + generatedOTP);
-                    document.getElementById('step-phone').classList.add('step-hidden');
-                    document.getElementById('step-otp').classList.remove('step-hidden');
+                    // Fallback في حال وجود مشكلة في الـ Sandbox
+                    alert("🔒 (وضع العرض) الرمز هو: " + otp);
+                    document.getElementById('phone-step').classList.add('step-hidden');
+                    document.getElementById('otp-step').classList.remove('step-hidden');
                 }
             } catch (err) {
                 loader.style.display = 'none';
-                alert("🔒 (Demo Mode) الرمز هو: " + generatedOTP);
-                document.getElementById('step-phone').classList.add('step-hidden');
-                document.getElementById('step-otp').classList.remove('step-hidden');
+                alert("🔒 الرمز للطوارئ: " + otp);
+                document.getElementById('phone-step').classList.add('step-hidden');
+                document.getElementById('otp-step').classList.remove('step-hidden');
             }
         });
     }
 
-    // دالة التحقق وتغيير الباسورد
-    function verifyAndChangePass() {
-        const inputOTP = document.getElementById('otpInput').value;
-        const savedOTP = sessionStorage.getItem('current_otp');
-        const newPass = document.getElementById('newPassword').value.trim();
+    // --- 4. دالة التحقق وتحديث الباسورد ---
+    function verifyAndUpdate() {
+        const userOtp = document.getElementById('otpInput').value;
+        const savedOtp = sessionStorage.getItem('my_otp');
+        const pass = document.getElementById('newPass').value;
 
-        if(inputOTP === savedOTP) {
-            if(newPass.length < 6) return alert("كلمة المرور يجب أن تكون 6 رموز فأكثر");
+        if (userOtp == savedOtp) {
+            if(pass.length < 6) return alert("الباسورد ضعيف!");
 
-            db.ref('adminSetting').update({
-                password: newPass
-            }).then(() => {
-                alert("🎉 مبروك! تم تحديث كلمة المرور بنجاح.");
-                location.reload(); // العودة للبداية
+            db.ref('adminSetting').update({ password: pass })
+            .then(() => {
+                alert("🎉 مبروك! تم تغيير كلمة المرور بنجاح.");
+                window.location.href = "login.html"; // يرجعك لصفحة الدخول
             });
         } else {
-            alert("❌ رمز التحقق غير صحيح!");
+            alert("❌ الرمز غير صحيح!");
         }
     }
 </script>
