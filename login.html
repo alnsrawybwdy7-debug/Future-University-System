@@ -3,105 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول | جامعة المستقبل</title>
+    <title>بوابة الوصول الآمن | جامعة المستقبل</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        
-        /* تنسيق الخلفية المتحركة */
-        #particles-js {
-            position: fixed; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            z-index: -1;
-        }
-
+        #particles-js { position: fixed; width: 100%; height: 100%; background: #0f172a; z-index: -1; }
         body { display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-
-        .wrapper {
-            width: 420px; background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px); border-radius: 20px;
-            padding: 40px; color: #fff; text-align: center;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
-        }
-
-        .logo-img { width: 100px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
-
-        h1 { font-size: 28px; margin-bottom: 25px; font-weight: bold; }
-
-        .input-box { position: relative; width: 100%; height: 50px; margin: 25px 0; }
-        .input-box input {
-            width: 100%; height: 100%; background: rgba(255,255,255,0.1);
-            border: none; outline: none; border-radius: 12px;
-            color: #fff; padding: 0 45px 0 20px; font-size: 16px;
-            transition: 0.3s; border: 1px solid transparent;
-        }
-        .input-box input:focus { border-color: #4cc9f0; background: rgba(255,255,255,0.15); }
+        .wrapper { width: 420px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-radius: 20px; padding: 40px; color: #fff; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .input-box { position: relative; width: 100%; height: 50px; margin: 20px 0; }
+        .input-box input { width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; padding: 0 45px 0 20px; font-size: 16px; outline: none; transition: 0.3s; }
         .input-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #4cc9f0; }
-
-        .btn {
-            width: 100%; height: 50px; background: #4361ee; border: none;
-            border-radius: 12px; color: white; font-size: 18px;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-            margin-top: 10px;
-        }
-        .btn:hover { background: #4cc9f0; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .btn { width: 100%; height: 50px; background: #4361ee; border: none; border-radius: 12px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn:hover { background: #4cc9f0; transform: translateY(-2px); }
+        #otpSection, #newPassSection { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="particles-js"></div> <div class="wrapper">
-        <form id="loginForm">
-            <img src="https://uomus.edu.iq/img/logo.png" alt="شعار جامعة المستقبل" class="logo-img">
-            <h1>دخول الموظفين</h1>
-            
-            <div class="input-box">
-                <input type="text" id="username" placeholder="اسم المستخدم" required>
-                <i class='bx bxs-user'></i>
-            </div>
-            
-            <div class="input-box">
-                <input type="password" id="password" placeholder="كلمة المرور" required>
-                <i class='bx bxs-lock-alt' ></i>
-            </div>
+<div id="particles-js"></div>
 
+<div class="wrapper">
+    <img src="https://uomus.edu.iq/img/logo.png" style="width: 80px; margin-bottom: 10px;">
+    
+    <div id="loginSection">
+        <h1>دخول الإدارة</h1>
+        <form id="loginForm">
+            <div class="input-box"><input type="text" id="username" placeholder="اسم المستخدم" required><i class='bx bxs-user-badge'></i></div>
+            <div class="input-box"><input type="password" id="password" placeholder="كلمة المرور" required><i class='bx bxs-lock-alt'></i></div>
             <button type="submit" class="btn">تسجيل الدخول</button>
-            <p style="margin-top: 20px; font-size: 13px; opacity: 0.7;">نظام المراجعة الذكي v2.0</p>
+            <p style="margin-top: 15px;"><a href="#" onclick="showReset()" style="color: #4cc9f0; text-decoration: none; font-size: 13px;">نسيت كلمة السر؟</a></p>
         </form>
     </div>
 
-    <script>
-        // إعداد الخلفية المتحركة
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80 },
-                "color": { "value": "#4cc9f0" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.4, "width": 1 },
-                "move": { "enable": true, "speed": 3 }
-            },
-            "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "repulse" } }
-            }
-        });
+    <div id="otpSection">
+        <h2>التحقق من الهوية</h2>
+        <div class="input-box"><input type="tel" id="phoneReset" placeholder="07XXXXXXXXX"><i class='bx bxs-phone-call'></i></div>
+        <button class="btn" id="sendBtn" onclick="sendOTP()">إرسال رمز OTP</button>
+        <div id="otpInputArea" style="display: none; margin-top: 20px;">
+            <input type="text" id="otpCode" placeholder="0000" maxlength="4" style="width: 120px; text-align: center; letter-spacing: 8px; padding: 10px; border-radius: 10px; color: #1a1a2e; font-size: 24px;">
+            <button class="btn" style="margin-top: 15px; background: #06d6a0;" onclick="verifyOTP()">تأكيد الرمز</button>
+        </div>
+    </div>
 
-        // نظام تسجيل الدخول مع الجلسة المؤقتة
-        document.getElementById('loginForm').onsubmit = function(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+    <div id="newPassSection">
+        <h2>كلمة سر جديدة</h2>
+        <div class="input-box"><input type="password" id="newPass" placeholder="كلمة السر الجديدة"><i class='bx bxs-key'></i></div>
+        <button class="btn" onclick="updatePasswordInDB()">تحديث كلمة السر</button>
+    </div>
+</div>
 
-            if(user === "admin" && pass === "future2026") {
-                // استخدام sessionStorage لجعل الدخول ينتهي عند قفل الصفحة أو تحديثها
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDj_p6Aqo7FuqEurK-yL7LFIUATA4-cG8I", 
+        authDomain: "hakthin-c6812.firebaseapp.com", 
+        databaseURL: "https://hakthin-c6812-default-rtdb.firebaseio.com/", 
+        projectId: "hakthin-c6812", 
+        appId: "1:208156149096:web:1c2676ed0eb66b8cc502dd" 
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    particlesJS("particles-js", {"particles":{"number":{"value":50},"color":{"value":"#4cc9f0"},"line_linked":{"enable":true,"opacity":0.2},"move":{"speed":1.5}}});
+
+    let serverOTP = 0;
+
+    // تسجيل الدخول - تم تعديل المسار ليتطابق مع صورتك (adminSetting)
+    document.getElementById('loginForm').onsubmit = function(e) {
+        e.preventDefault();
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        db.ref('adminSetting').once('value', (snap) => {
+            const data = snap.val();
+            if(user === "admin" && pass === data.password) {
                 sessionStorage.setItem("isLoggedIn", "true");
                 window.location.href = "admin.html";
             } else {
                 alert("بيانات الدخول غير صحيحة!");
             }
-        }
-    </script>
+        });
+    };
+
+    function showReset() {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('otpSection').style.display = 'block';
+    }
+
+    async function sendOTP() {
+        const phone = document.getElementById('phoneReset').value;
+        db.ref('adminSetting').once('value', async (snap) => {
+            if(phone !== snap.val().phone) return alert("هذا الرقم غير مسجل!");
+            
+            serverOTP = Math.floor(1000 + Math.random() * 9000);
+            await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify({ to: phone, message: `OTP: ${serverOTP}` }),
+                headers: { 'Content-type': 'application/json' }
+            });
+            alert("وصلك رمز OTP الآن: " + serverOTP);
+            document.getElementById('otpInputArea').style.display = 'block';
+        });
+    }
+
+    function verifyOTP() {
+        if(document.getElementById('otpCode').value == serverOTP) {
+            document.getElementById('otpSection').style.display = 'none';
+            document.getElementById('newPassSection').style.display = 'block';
+        } else { alert("الرمز خطأ!"); }
+    }
+
+    // تحديث كلمة السر في قاعدة البيانات
+    function updatePasswordInDB() {
+        const newP = document.getElementById('newPass').value;
+        db.ref('adminSetting').update({ password: newP }).then(() => {
+            alert("تم تحديث كلمة السر في Firebase!");
+            location.reload();
+        });
+    }
+</script>
 </body>
 </html>
