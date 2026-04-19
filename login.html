@@ -13,11 +13,9 @@
         .wrapper { width: 420px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-radius: 20px; padding: 40px; color: #fff; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
         .input-box { position: relative; width: 100%; height: 50px; margin: 20px 0; }
         .input-box input { width: 100%; height: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; padding: 0 45px 0 20px; font-size: 16px; outline: none; transition: 0.3s; }
-        .input-box input:focus { border-color: #4cc9f0; }
         .input-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #4cc9f0; }
         .btn { width: 100%; height: 50px; background: #4361ee; border: none; border-radius: 12px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn:hover { background: #4cc9f0; transform: translateY(-2px); }
-        .btn:disabled { background: #555; cursor: not-allowed; }
         #otpSection, #newPassSection { display: none; }
         .loading { display: none; margin-top: 10px; color: #4cc9f0; font-size: 14px; }
     </style>
@@ -35,27 +33,26 @@
             <div class="input-box"><input type="text" id="username" placeholder="اسم المستخدم" required><i class='bx bxs-user-badge'></i></div>
             <div class="input-box"><input type="password" id="password" placeholder="كلمة المرور" required><i class='bx bxs-lock-alt'></i></div>
             <button type="submit" class="btn">تسجيل الدخول</button>
-            <p style="margin-top: 15px;"><a href="#" onclick="showReset()" style="color: #4cc9f0; text-decoration: none; font-size: 13px;">نسيت كلمة السر؟</a></p>
+            <p style="margin-top: 15px;"><a href="#" onclick="showReset()" style="color: #4cc9f0; text-decoration: none; font-size: 13px;">نسيت كلمة السر؟ استعادة عبر الهاتف</a></p>
         </form>
     </div>
 
     <div id="otpSection">
         <h2>تحقق SMS</h2>
-        <p style="font-size: 12px; margin: 15px 0; opacity: 0.8;">أدخل الرقم المسجل لاستلام رمز الدخول</p>
-        <div class="input-box"><input type="tel" id="phoneReset" placeholder="077XXXXXXXX" required><i class='bx bxs-phone-call'></i></div>
+        <div class="input-box"><input type="tel" id="phoneReset" placeholder="077XXXXXXXX"><i class='bx bxs-phone-call'></i></div>
         <button class="btn" id="sendBtn" onclick="sendOTPReal()">إرسال الرمز للهاتف</button>
-        <div id="loadingMsg" class="loading"><i class='bx bx-loader-alt bx-spin'></i> جاري إرسال الرسالة عبر Twilio...</div>
+        <div id="loadingMsg" class="loading"><i class='bx bx-loader-alt bx-spin'></i> جاري الاتصال بـ Twilio...</div>
         
         <div id="otpInputArea" style="display: none; margin-top: 20px;">
-            <input type="text" id="otpCode" placeholder="0000" maxlength="4" style="width: 120px; text-align: center; padding: 10px; border-radius: 10px; border: none; font-size: 22px; color: #1a1a2e; font-weight: bold;">
+            <input type="text" id="otpCode" placeholder="الرمز" maxlength="4" style="width: 120px; text-align: center; padding: 10px; border-radius: 10px; border: none; font-size: 22px; color: #1a1a2e; font-weight: bold;">
             <button class="btn" style="margin-top: 15px; background: #06d6a0;" onclick="verifyOTP()">تأكيد الرمز</button>
         </div>
     </div>
 
     <div id="newPassSection">
-        <h2>تعيين كلمة سر جديدة</h2>
+        <h2>كلمة سر جديدة</h2>
         <div class="input-box"><input type="password" id="newPass" placeholder="كلمة السر الجديدة"><i class='bx bxs-key'></i></div>
-        <button class="btn" onclick="updatePasswordInDB()">تحديث في قاعدة البيانات</button>
+        <button class="btn" onclick="updatePasswordInDB()">حفظ في السيرفر</button>
     </div>
 </div>
 
@@ -63,7 +60,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
-    // إعداد Firebase (نفس إعدادات مشروعك)
+    // إعدادات مشروعك الحقيقي (hakthin-c6812)
     const firebaseConfig = { 
         apiKey: "AIzaSyDj_p6Aqo7FuqEurK-yL7LFIUATA4-cG8I", 
         authDomain: "hakthin-c6812.firebaseapp.com", 
@@ -76,18 +73,21 @@
 
     particlesJS("particles-js", {"particles":{"number":{"value":50},"color":{"value":"#4cc9f0"},"line_linked":{"opacity":0.2},"move":{"speed":1}}});
 
-    // تسجيل الدخول العادي
+    // تسجيل الدخول - تم ربطه بكلمة السر في Firebase (ppooiiuu078)
     document.getElementById('loginForm').onsubmit = function(e) {
         e.preventDefault();
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
 
+        // جلب كلمة السر من عقدة adminSetting كما في صورتك
         db.ref('adminSetting').once('value', (snap) => {
             const data = snap.val();
             if(user === "admin" && pass === data.password) {
                 sessionStorage.setItem("isLoggedIn", "true");
                 window.location.href = "admin.html";
-            } else { alert("خطأ في بيانات الدخول!"); }
+            } else {
+                alert("خطأ! تأكد من اسم المستخدم أو كلمة السر.");
+            }
         });
     };
 
@@ -96,30 +96,24 @@
         document.getElementById('otpSection').style.display = 'block';
     }
 
-    // إرسال SMS حقيقي عبر Twilio باستخدام بياناتك
+    // إرسال SMS باستخدام Twilio وبياناتك
     async function sendOTPReal() {
         const phone = document.getElementById('phoneReset').value;
         const loader = document.getElementById('loadingMsg');
-        const sendBtn = document.getElementById('sendBtn');
-
+        
         const accountSid = 'ACd086c08e69d12da4d1c05986c56642e1'; 
         const authToken = '7963a050d51560c84fde65733a55be2f';
         const messagingServiceSid = 'MG663e918266f389acf8089c5d3077f987';
 
         db.ref('adminSetting').once('value', async (snap) => {
-            if(phone !== snap.val().phone) return alert("هذا الرقم غير مسجل في النظام!");
+            if(phone !== snap.val().phone) return alert("الرقم غير موثق!");
 
             loader.style.display = 'block';
-            sendBtn.disabled = true;
-
             const generatedOTP = Math.floor(1000 + Math.random() * 9000);
             sessionStorage.setItem('temp_otp', generatedOTP);
 
-            // تحويل الرقم للصيغة الدولية
             let formattedPhone = phone;
-            if(phone.startsWith('0')) {
-                formattedPhone = '+964' + phone.substring(1);
-            }
+            if(phone.startsWith('0')) formattedPhone = '+964' + phone.substring(1);
 
             try {
                 const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`, {
@@ -131,42 +125,33 @@
                     body: new URLSearchParams({
                         'To': formattedPhone,
                         'MessagingServiceSid': messagingServiceSid,
-                        'Body': `رمز التحقق الخاص بك لجامعة المستقبل هو: ${generatedOTP}`
+                        'Body': `رمز التحقق لجامعة المستقبل: ${generatedOTP}`
                     })
                 });
 
                 if(response.ok) {
                     loader.style.display = 'none';
-                    alert("تم إرسال الرمز بنجاح! افحص هاتفك الآن.");
+                    alert("تم إرسال SMS بنجاح!");
                     document.getElementById('otpInputArea').style.display = 'block';
-                } else {
-                    const err = await response.json();
-                    alert("فشل الإرسال: " + err.message);
-                    loader.style.display = 'none';
-                    sendBtn.disabled = false;
                 }
             } catch (err) {
-                alert("خطأ في الاتصال بـ API");
+                alert("فشل الاتصال بمزود الخدمة!");
                 loader.style.display = 'none';
-                sendBtn.disabled = false;
             }
         });
     }
 
     function verifyOTP() {
-        const input = document.getElementById('otpCode').value;
-        const stored = sessionStorage.getItem('temp_otp');
-        if(input === stored) {
-            sessionStorage.removeItem('temp_otp');
+        if(document.getElementById('otpCode').value == sessionStorage.getItem('temp_otp')) {
             document.getElementById('otpSection').style.display = 'none';
             document.getElementById('newPassSection').style.display = 'block';
-        } else { alert("الرمز غير صحيح!"); }
+        } else { alert("الرمز خطأ!"); }
     }
 
     function updatePasswordInDB() {
         const newP = document.getElementById('newPass').value;
         db.ref('adminSetting').update({ password: newP }).then(() => {
-            alert("تم تحديث كلمة السر في السيرفر بنجاح!");
+            alert("تم التحديث! يمكنك الآن الدخول بكلمة السر الجديدة.");
             location.reload();
         });
     }
